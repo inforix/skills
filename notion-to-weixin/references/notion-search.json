@@ -1,0 +1,11 @@
+{
+  "query": "__TITLE__",
+  "filter": {
+    "property": "object",
+    "value": "page"
+  },
+  "sort": {
+    "direction": "descending",
+    "timestamp": "last_edited_time"
+  }
+}
