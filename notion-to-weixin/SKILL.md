@@ -10,11 +10,11 @@ description: Fetch a Notion page by title, export to Markdown, convert Markdown 
 1. Resolve Notion page ID from the given title.
 2. Export the page to Markdown.
 3. Ensure `author` exists in Markdown front matter (and inject a byline if needed).
-4. Convert Markdown to HTML using the provided CSS file.
+4. Convert Markdown to HTML (optional; needed for custom CSS).
 5. Prepare `thumb_media_id`:
    - If the Notion page has a cover, upload it as a Weixin `thumb` material and use that ID.
    - If no cover, use the last image material ID.
-6. Create a new Weixin draft with the HTML content and `thumb_media_id`.
+6. Create a new Weixin draft with HTML (manual conversion) or Markdown (wxcli auto-conversion).
 
 ## Inputs (Ask the user if missing)
 
@@ -28,7 +28,7 @@ description: Fetch a Notion page by title, export to Markdown, convert Markdown 
 - `notion-cli` installed and authenticated (NOTION_TOKEN or `notion auth set`).
 - `wxcli` installed and authenticated (`wxcli auth set` or `wxcli auth login`).
 - `curl` and `jq` available.
-- `npx markdown-to-html-cli` available.
+- `npx markdown-to-html-cli` available if using manual HTML conversion.
 
 ## Step 1: Resolve Page ID by Title
 
@@ -60,7 +60,10 @@ author: <AUTHOR>
 *作者：<AUTHOR>*
 ```
 
-## Step 4: Convert Markdown to HTML
+## Step 4: Convert Markdown to HTML (Optional)
+
+Use manual conversion when you need a specific CSS theme. If your wxcli build supports
+Markdown input, you can skip this step and pass Markdown directly in Step 6.
 
 - Convert with the user-provided CSS (or default CSS if none is provided):
 
@@ -115,7 +118,7 @@ thumb_media_id=$(wxcli material list --type image --offset "$offset" --count 1 -
 
 ## Step 6: Create Weixin Draft
 
-- Create a new draft using HTML content:
+- Create a new draft using HTML content (manual conversion path):
 
 ```bash
 wxcli draft add \
@@ -123,6 +126,17 @@ wxcli draft add \
   --content - \
   --thumb-media-id "$thumb_media_id" < <workdir>/page.html
 ```
+
+- Create a new draft using Markdown content (wxcli auto-conversion path):
+
+```bash
+wxcli draft add \
+  --title "<notion_title>" \
+  --content - \
+  --thumb-media-id "$thumb_media_id" < <workdir>/page.md
+```
+
+If your wxcli build requires an explicit flag to indicate Markdown input, add it to the command.
 
 - If you need machine-readable output, add `--json` and capture the returned `media_id`.
 
@@ -136,6 +150,14 @@ npx markdown-to-html-cli --source <workdir>/page.md --style <css_path> | \
 ```
 
 Note: you still need the author/front‑matter step before this pipe.
+
+If you prefer a single pipe for Markdown → draft creation (wxcli auto‑conversion):
+
+```bash
+cat <workdir>/page.md | \
+  wxcli draft add --title "<notion_title>" --content - --thumb-media-id "$thumb_media_id"
+```
+
 
 ## Resources
 
@@ -160,3 +182,4 @@ scripts/run_pipeline.sh --title "My Notion Page" --css /path/style.css --author 
 Notes:
 - Use `--page-id` if the title search is ambiguous.
 - Use `--thumb-media-id` only if cover and image fallback are unavailable.
+- The script uses manual HTML conversion to apply CSS. For wxcli auto‑conversion, use the Markdown commands in Step 6.

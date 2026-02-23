@@ -58,6 +58,12 @@ Create a draft (HTML from stdin):
 wxcli draft add --title "Hello" --content - --thumb-media-id MEDIA_ID
 ```
 
+Create a draft (Markdown from stdin; wxcli auto‑conversion if supported):
+
+```bash
+wxcli draft add --title "Hello" --content - --thumb-media-id MEDIA_ID < article.md
+```
+
 Markdown to HTML (used before draft add):
 
 ```bash
