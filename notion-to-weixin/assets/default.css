@@ -9,7 +9,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
   background:#fff1f1;
   }
 
-#nice {
+* {
     font-family: Optima-Regular, Optima, PingFangSC-light, PingFangTC-light, "PingFang SC", Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
     padding: 15px;
     font-size: 16px;
@@ -30,7 +30,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
    * 字体大小 font-size:16px;
    * 首行缩进 text-indent:2em;
    */
-#nice p {
+p {
     line-height: 2.5;
     margin: 0.8em 0;
     font-size: 16px;
@@ -39,14 +39,14 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 }
 
 /* 一级标题 */
-#nice h1 {
+h1 {
     
     text-align: center;
     font-size: 1.3em;
 }
 
 /* 一级标题内容 */
-#nice h1 .content {
+h1 .content {
     display: inline-block;
     font-weight: bold;
     background: #039;
@@ -55,17 +55,15 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
     border-radius: 13px 13px 13px 13px;
 }
 
-/* 一级标题修饰 请参考有实例的主题 */
-#nice h1:after {}
 
 /* 二级标题 */
-#nice h2 {
+h2 {
     text-align: left;
     margin: 20px 10px 0px 0px;
 }
 
 /* 二级标题内容 */
-#nice h2 .content {
+h2 {
     font-size: 36px;
     font-weight: bold;
     color: #039;
@@ -74,30 +72,22 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
     border-left: 5px solid #039;
 }
 
-/* 二级标题修饰 请参考有实例的主题 */
-#nice h2:after {}
-
-/* 三级标题 */
-#nice h3 {}
-
 /* 三级标题内容 */
-#nice h3 .content {
+h3  {
     font-size: 28px;
     color: #039;
 }
 
-#nice h4 .content {
+h4 {
   color: #039;
   font-weight: 700;
 }
 
-/* 三级标题修饰 请参考有实例的主题 */
-#nice h3:after {}
 
 /* 无序列表整体样式
    * list-style-type: square|circle|disc;
    */
-#nice ul {
+ul {
     color: #039;
     font-size: 16px;
 }
@@ -105,7 +95,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 /* 有序列表整体样式
    * list-style-type: upper-roman|lower-greek|lower-alpha;
    */
-#nice ol {
+ol {
     color: #039;
     font-size: 16px;
   
@@ -113,7 +103,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 
 /* 列表内容，不要设置li
    */
-#nice li section {
+li section {
     color: #353535;
   line-height:2;
 }
@@ -122,7 +112,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
    * 左边缘颜色 border-left-color:black;
    * 背景色 background:gray;
    */
-#nice .multiquote-3 {
+.multiquote-3 {
     font-style: normal;
     border-left: none;
     padding: 15px 10px;
@@ -133,7 +123,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
   text-align: justify;
 }
 
-#nice .multiquote-3:before {
+.multiquote-3:before {
     content: "“";
     display: block;
     font-size: 2em;
@@ -144,7 +134,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 }
 
 /* 引用文字 */
-#nice .multiquote-3 p {
+.multiquote-3 p {
     color: #353535;
     font-size: 16px;
     margin: 0 10px;
@@ -152,7 +142,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
   line-height: 2;
 }
 
-#nice .multiquote-1:after {
+.multiquote-1:after {
     content: "”";
     float: right;
     display: block;
@@ -166,7 +156,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 /* 链接 
 * border-bottom: 1px solid #009688;
 */
-#nice a {
+a {
     color: rgb(41, 57, 245);
     font-weight: 400;
     border-bottom: 1px solid rgb(41, 57, 245);
@@ -174,31 +164,28 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 }
 
 /* 加粗 */
-#nice strong {
+strong {
     font-weight: 700;
     color: #039;
 }
 
 /* 斜体 */
-#nice em {
+em {
   color: #933;
   background-color: transparent;
     /* background-color: #cfc;*/
 }
 
 /* 加粗斜体 */
-#nice em strong {
+em strong {
     color: #039;
 }
-
-/* 删除线 */
-#nice del {}
 
 /* 分隔线
    * 粗细、样式和颜色
    * border-top:1px solid #3e3e3e;
    */
-#nice hr {
+hr {
     height: 1px;
     padding: 0;
     border: none;
@@ -212,18 +199,18 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
    * 居中 margin:0 auto;
    * 居左 margin:0 0;
    */
-#nice figure {
+figure {
     border-radius: 16px;
     overflow: hidden;
 }
 
-#nice figure a img {
+figure a img {
     border-radius: 16px;
     width: 100%;
     max-width: 100%;
 }
 
-#nice img {
+img {
     border-radius: 6px;
     display: block;
     margin: 20px auto;
@@ -232,14 +219,14 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 }
 
 /* 图片描述文字 */
-#nice figcaption {
+figcaption {
     display: block;
     font-size: 12px;
 }
 
 /* 行内代码 */
-#nice p code,
-#nice li code {
+p code,
+li code {
     color: #444;
 }
 
@@ -247,7 +234,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
    * 代码块不换行 display:-webkit-box !important;
    * 代码块换行 display:block;
    */
-#nice pre code {}
+pre code {}
 
 /*
    * 表格内的单元格
@@ -255,35 +242,35 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
    * 边框 border: 1px solid #ccc;
    * 内边距 padding: 5px 10px;
    */
-#nice table tr th,
-#nice table tr td {
+table tr th,
+table tr td {
     font-size: 16px;
     color: #645647;
 }
 
-#nice table tr th {
+table tr th {
     color: #353535;
     background-color: #dbd9d8;
 }
 
-#nice .footnotes {
+.footnotes {
     font-size: 16px;
 }
 
 /* 脚注文字 */
-#nice .footnote-word {
+.footnote-word {
     font-weight: normal;
     color: #f83929;
 }
 
 /* 脚注上标 */
-#nice .footnote-ref {
+.footnote-ref {
     font-weight: normal;
     color: #f83929;
 }
 
 /*脚注链接样式*/
-#nice .footnote-item em {
+.footnote-item em {
     font-size: 16px;
     display: block;
 }
@@ -291,7 +278,7 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 /* "参考资料"四个字 
   * 内容 content: "参考资料";
   */
-#nice .footnotes-sep:before {
+.footnotes-sep:before {
     content: '参考资料 ';
     color: #f83929;
     letter-spacing: 1px;
@@ -304,18 +291,18 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 }
 
 /* 参考资料编号 */
-#nice .footnote-num {
+.footnote-num {
     color: #f83929;
 }
 
 /* 参考资料文字 */
-#nice .footnote-item p {
+.footnote-item p {
     font-weight: 400;
     color: #f83929;
 }
 
 /* 参考资料解释 */
-#nice .footnote-item p em {
+.footnote-item p em {
     font-weight: 400;
     font-size: 14px;
     color: #353535;
@@ -324,19 +311,19 @@ div.table table tr:nth-child(1), div.table table tr:nth-child(9) {
 /* 行间公式
   * 最大宽度 max-width: 300% !important;
   */
-#nice .block-equation svg {
+.block-equation svg {
     color: #353535;
 }
 
 /* 行内公式
   */
-#nice .inline-equation svg {
+.inline-equation svg {
     color: #353535;
 }
 
 /* 滑动图片
    */
-#nice .imageflow-img {
+.imageflow-img {
     display: inline-block;
     width: 100%;
     margin-bottom: 0;

@@ -21,7 +21,7 @@ notion search --body @query.json
 Export page to Markdown:
 
 ```bash
-notion pages export <page_id> --assets=link -o page.md
+notion pages export <page_id> --assets=download -o page.md
 ```
 
 Download a Notion file object (e.g., cover image):

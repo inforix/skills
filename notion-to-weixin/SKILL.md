@@ -24,10 +24,12 @@ author: "Alice Wang"
 
 1. Resolve Notion page ID from the given title.
 2. Export the page to Markdown.
-3. Prepare `thumb_media_id`:
+3. Ensure `author` exists in Markdown front matter (and inject a byline if needed).
+4. Process images (upload to Weixin and replace URLs in Markdown).
+5. Prepare `thumb_media_id`:
    - If the Notion page has a cover, upload it as a Weixin `thumb` material and use that ID.
    - If no cover, use the last image material ID.
-4. Create a new Weixin draft using Markdown input (wxcli converts to HTML).
+6. Create a new Weixin draft using Markdown input (wxcli converts to HTML).
 
 ## Inputs (Ask the user if missing)
 
@@ -39,7 +41,6 @@ author: "Alice Wang"
 - `notion-cli` installed and authenticated (NOTION_TOKEN or `notion auth set`).
 - `wxcli` installed and authenticated (`wxcli auth set` or `wxcli auth login`).
 - `curl` and `jq` available.
-- `python3` + `pyyaml` only if you want `.agents/config.yaml` defaults.
 
 ## Step 1: Resolve Page ID by Title
 
@@ -50,18 +51,38 @@ author: "Alice Wang"
 
 ## Step 2: Export Page to Markdown
 
-- Use `notion pages export <page_id> --assets=link -o <workdir>/page.md`.
+- Use `notion pages export <page_id> --assets=download -o <workdir>/page.md` when the page contains images.
 - Use a workdir like `/tmp/notion-to-weixin/<slug-or-timestamp>`.
 
 ## Step 3: Default Author Handling
 
-- If `author` is not provided, read it from `~/.agents/config.yaml` .
+- If `author` is not provided, read it from `~/.agents/config.yaml`.
 
 
 
-## Step 4: Prepare `thumb_media_id`
+## Step 4: Process Images (Recommended)
 
-### 4.1 If Notion page has a cover
+If the Notion page contains images, upload them to Weixin and replace Markdown image URLs
+so they remain valid for draft rendering.
+
+1. Find image links in `<workdir>/page.md`. Notion exports local images under the assets folder.
+2. For each local image file, upload it and capture the `url`:
+
+```bash
+wxcli material upload --type image --file <workdir>/assets/<image-file> --json | jq -r '.url'
+```
+
+3. Replace the Markdown image URL with the returned `url`:
+
+```markdown
+![alt](<weixin-url>)
+```
+
+If you skip this step, images that reference local files or expiring Notion URLs may not render in Weixin.
+
+## Step 5: Prepare `thumb_media_id`
+
+### 5.1 If Notion page has a cover
 
 1. Fetch page metadata (use notion-cli):
 
@@ -89,7 +110,7 @@ thumb_media_id=$(wxcli material upload --type thumb --file <workdir>/cover.jpg -
 
 Note: Notion file URLs expire quickly. If download fails, re-fetch page metadata and retry.
 
-### 4.2 If no cover exists
+### 5.2 If no cover exists
 
 1. Get image material count:
 
@@ -106,7 +127,7 @@ thumb_media_id=$(wxcli material list --type image --offset "$offset" --count 1 -
 
 3. If no images exist, ask the user to provide a `thumb_media_id` or upload a thumb manually.
 
-## Step 5: Create Weixin Draft (Markdown input)
+## Step 6: Create Weixin Draft (Markdown input)
 
 ```bash
 wxcli draft add \
@@ -141,12 +162,6 @@ wxcli draft add \
 - `references/notion-search.json`: JSON template for Notion title search.
 - `references/cli-commands.md`: Canonical CLI command examples for `notion-cli` and `wxcli`.
 
-## Scripts
-
-no scripts needed - this is a manual workflow. You can automate it with a shell script or Python if desired.
-
 Notes:
 - Use `--page-id` if the title search is ambiguous.
 - Use `--thumb-media-id` only if cover and image fallback are unavailable.
-- The script uses wxcli Markdown conversion (no manual HTML step).
-- If `--author` is omitted, the script attempts to read `.agent/config.yaml` (see Config above).
