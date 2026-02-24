@@ -18,7 +18,7 @@ description: Fetch a Notion page by title, export to Markdown, convert Markdown 
 ## Inputs (Ask the user if missing)
 
 - `notion_title`: exact Notion page title to publish.
-- `author`: default author name (used for Markdown front matter and wxcli `--author`).
+- `author`: optional author name (used for Markdown front matter and wxcli `--author`). If missing, read from `.agent/config.yaml`.
 - `thumb_media_id`: only required if cover and image fallback both fail.
 
 ## Prerequisites
@@ -26,6 +26,7 @@ description: Fetch a Notion page by title, export to Markdown, convert Markdown 
 - `notion-cli` installed and authenticated (NOTION_TOKEN or `notion auth set`).
 - `wxcli` installed and authenticated (`wxcli auth set` or `wxcli auth login`).
 - `curl` and `jq` available.
+- `python3` + `pyyaml` only if you want `.agent/config.yaml` defaults.
 
 ## Step 1: Resolve Page ID by Title
 
@@ -41,6 +42,7 @@ description: Fetch a Notion page by title, export to Markdown, convert Markdown 
 
 ## Step 3: Default Author Handling
 
+- If `author` is not provided, read it from `.agent/config.yaml` (see Config below).
 - Read `<workdir>/page.md` and ensure YAML front matter exists.
 - Set or overwrite `author:` in front matter to the chosen author.
 - If no front matter exists, insert:
@@ -55,6 +57,22 @@ author: <AUTHOR>
 
 ```markdown
 *作者：<AUTHOR>*
+```
+
+## Config (Optional)
+
+If you want a project‑level default author, add one of these to `.agent/config.yaml`:
+
+```yaml
+notion_to_weixin:
+  author: "Alice Wang"
+```
+
+Fallbacks (checked in order):
+
+```yaml
+author: "Alice Wang"
+default_author: "Alice Wang"
 ```
 
 ## Step 4: Prepare `thumb_media_id`
@@ -151,3 +169,4 @@ Notes:
 - Use `--page-id` if the title search is ambiguous.
 - Use `--thumb-media-id` only if cover and image fallback are unavailable.
 - The script uses wxcli Markdown conversion (no manual HTML step).
+- If `--author` is omitted, the script attempts to read `.agent/config.yaml` (see Config above).

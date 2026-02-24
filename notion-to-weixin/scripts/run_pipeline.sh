@@ -39,8 +39,41 @@ done
 if [[ -z "$NOTION_TITLE" && -z "$PAGE_ID" ]]; then
   echo "Missing --title or --page-id"; exit 1
 fi
+CONFIG_PATH="${AGENT_CONFIG_PATH:-.agent/config.yaml}"
+if [[ -z "$AUTHOR" && -f "$CONFIG_PATH" ]]; then
+  AUTHOR="$(python3 - <<PY || true
+import sys
+from pathlib import Path
+try:
+    import yaml
+except Exception:
+    print("")
+    sys.exit(0)
+
+cfg_path = Path("$CONFIG_PATH")
+data = yaml.safe_load(cfg_path.read_text(encoding="utf-8")) or {}
+
+def pick(d, path):
+    cur = d
+    for key in path:
+        if not isinstance(cur, dict) or key not in cur:
+            return None
+        cur = cur[key]
+    return cur
+
+for path in (("notion_to_weixin", "author"), ("author",), ("default_author",)):
+    val = pick(data, path)
+    if isinstance(val, str) and val.strip():
+        print(val.strip())
+        sys.exit(0)
+
+print("")
+PY
+)"
+fi
+
 if [[ -z "$AUTHOR" ]]; then
-  echo "Missing --author"; exit 1
+  echo "Missing --author (and no default found in $CONFIG_PATH)"; exit 1
 fi
 
 if [[ -z "$WORKDIR" ]]; then
