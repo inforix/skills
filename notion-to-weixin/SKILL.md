@@ -113,6 +113,8 @@ wxcli draft add \
   --title "<notion_title>" \
   --author "<author>" \
   --content - \
+  --need-open-comment=1 \
+  --only-fans-can-comment=0 \
   --thumb-media-id "$thumb_media_id" < <workdir>/page.md
 ```
 
@@ -126,6 +128,8 @@ wxcli draft add \
   --author "<author>" \
   --format markdown \
   --content - \
+  --need-open-comment=1 \
+  --only-fans-can-comment=0 \
   --thumb-media-id "$thumb_media_id" < <workdir>/page.md
 ```
 
@@ -139,17 +143,7 @@ wxcli draft add \
 
 ## Scripts
 
-- `scripts/ensure_author.py`: Ensure Markdown front matter has `author`, and optionally inject a byline.
-
-```bash
-scripts/ensure_author.py --input <workdir>/page.md --author "NAME" --byline
-```
-
-- `scripts/run_pipeline.sh`: One-shot test script for the full Notion → Weixin flow (Markdown input).
-
-```bash
-scripts/run_pipeline.sh --title "My Notion Page" --author "NAME"
-```
+no scripts needed - this is a manual workflow. You can automate it with a shell script or Python if desired.
 
 Notes:
 - Use `--page-id` if the title search is ambiguous.
