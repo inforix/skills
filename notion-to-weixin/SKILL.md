@@ -7,7 +7,7 @@ description: Fetch a Notion page by title, export to Markdown, convert Markdown 
 
 ## Config (Optional)
 
-Set a default `author` in `.agent/config.yaml`:
+Set a default `author` in `~/.agents/config.yaml`:
 
 ```yaml
 notion_to_weixin:
@@ -24,16 +24,14 @@ author: "Alice Wang"
 
 1. Resolve Notion page ID from the given title.
 2. Export the page to Markdown.
-3. Ensure `author` exists in Markdown front matter (and inject a byline if needed).
-4. Prepare `thumb_media_id`:
+3. Prepare `thumb_media_id`:
    - If the Notion page has a cover, upload it as a Weixin `thumb` material and use that ID.
    - If no cover, use the last image material ID.
-5. Create a new Weixin draft using Markdown input (wxcli converts to HTML).
+4. Create a new Weixin draft using Markdown input (wxcli converts to HTML).
 
 ## Inputs (Ask the user if missing)
 
 - `notion_title`: exact Notion page title to publish.
-- `author`: optional author name (used for Markdown front matter and wxcli `--author`). If missing, read from `.agent/config.yaml`.
 - `thumb_media_id`: only required if cover and image fallback both fail.
 
 ## Prerequisites
@@ -41,7 +39,7 @@ author: "Alice Wang"
 - `notion-cli` installed and authenticated (NOTION_TOKEN or `notion auth set`).
 - `wxcli` installed and authenticated (`wxcli auth set` or `wxcli auth login`).
 - `curl` and `jq` available.
-- `python3` + `pyyaml` only if you want `.agent/config.yaml` defaults.
+- `python3` + `pyyaml` only if you want `.agents/config.yaml` defaults.
 
 ## Step 1: Resolve Page ID by Title
 
@@ -57,7 +55,7 @@ author: "Alice Wang"
 
 ## Step 3: Default Author Handling
 
-- If `author` is not provided, read it from `.agent/config.yaml` .
+- If `author` is not provided, read it from `~/.agents/config.yaml` .
 
 
 
@@ -65,13 +63,10 @@ author: "Alice Wang"
 
 ### 4.1 If Notion page has a cover
 
-1. Fetch page metadata:
+1. Fetch page metadata (use notion-cli):
 
 ```bash
-curl -sS \
-  -H "Authorization: Bearer $NOTION_TOKEN" \
-  -H "Notion-Version: 2022-06-28" \
-  "https://api.notion.com/v1/pages/<page_id>" > <workdir>/page.json
+notion pages get <page_id> > <workdir>/page.json
 ```
 
 2. Extract cover URL:
