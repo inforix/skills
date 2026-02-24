@@ -126,9 +126,14 @@ if [[ -n "${NOTION_TOKEN:-}" ]]; then
     -H "Notion-Version: 2022-06-28" \
     "https://api.notion.com/v1/pages/$PAGE_ID" > "$WORKDIR/page.json"
 
+  COVER_TYPE=$(jq -r '.cover.type // ""' "$WORKDIR/page.json")
   COVER_URL=$(jq -r '.cover | if .==null then "" elif .type=="external" then .external.url else .file.url end' "$WORKDIR/page.json")
   if [[ -n "$COVER_URL" ]]; then
-    curl -L "$COVER_URL" -o "$WORKDIR/cover.jpg"
+    if [[ "$COVER_TYPE" == "file" ]]; then
+      jq -c '.cover' "$WORKDIR/page.json" | notion files read --body @- --output "$WORKDIR/cover.jpg"
+    else
+      curl -L "$COVER_URL" -o "$WORKDIR/cover.jpg"
+    fi
     THUMB_MEDIA_ID=$(wxcli material upload --type thumb --file "$WORKDIR/cover.jpg" --json | jq -r '.media_id')
   fi
 fi

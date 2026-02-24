@@ -24,6 +24,12 @@ Export page to Markdown:
 notion pages export <page_id> --assets=link -o page.md
 ```
 
+Download a Notion file object (e.g., cover image):
+
+```bash
+notion files read --body @- --output ./cover.jpg
+```
+
 ## wxcli
 
 Auth:

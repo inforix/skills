@@ -69,16 +69,21 @@ author: "Alice Wang"
 notion pages get <page_id> > <workdir>/page.json
 ```
 
-2. Extract cover URL:
+2. Extract cover type + cover URL:
 
 ```bash
+cover_type=$(jq -r '.cover.type // ""' <workdir>/page.json)
 cover_url=$(jq -r '.cover | if .==null then "" elif .type=="external" then .external.url else .file.url end' <workdir>/page.json)
 ```
 
-3. If `cover_url` is set, download and upload as thumb:
+3. If cover type is `file`, download via notion-cli; if `external`, use curl:
 
 ```bash
-curl -L "$cover_url" -o <workdir>/cover.jpg
+if [ "$cover_type" = "file" ]; then
+  jq -c '.cover' <workdir>/page.json | notion files read --body @- --output <workdir>/cover.jpg
+else
+  curl -L "$cover_url" -o <workdir>/cover.jpg
+fi
 thumb_media_id=$(wxcli material upload --type thumb --file <workdir>/cover.jpg --json | jq -r '.media_id')
 ```
 
