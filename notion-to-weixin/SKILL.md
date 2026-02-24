@@ -29,11 +29,13 @@ author: "Alice Wang"
 5. Prepare `thumb_media_id`:
    - If the Notion page has a cover, upload it as a Weixin `thumb` material and use that ID.
    - If no cover, use the last image material ID.
-6. Create a new Weixin draft using Markdown input (wxcli converts to HTML).
+6. Create a new Weixin draft using Markdown input (wxcli converts to HTML, optional CSS).
 
 ## Inputs (Ask the user if missing)
 
 - `notion_title`: exact Notion page title to publish.
+- `author`: optional author name (used for Markdown front matter and wxcli `--author`). If missing, read from `~/.agents/config.yaml`.
+- `css_path`: optional CSS file path (wxcli `--css-path` inlines styles). You can use `assets/default.css`.
 - `thumb_media_id`: only required if cover and image fallback both fail.
 
 ## Prerequisites
@@ -57,6 +59,7 @@ author: "Alice Wang"
 ## Step 3: Default Author Handling
 
 - If `author` is not provided, read it from `~/.agents/config.yaml`.
+- Ensure `author` exists in Markdown front matter (and add a byline if you want it visible in content).
 
 
 
@@ -134,6 +137,7 @@ wxcli draft add \
   --title "<notion_title>" \
   --author "<author>" \
   --content - \
+  --css-path <css_path> \
   --need-open-comment=1 \
   --only-fans-can-comment=0 \
   --thumb-media-id "$thumb_media_id" < <workdir>/page.md
@@ -149,6 +153,7 @@ wxcli draft add \
   --author "<author>" \
   --format markdown \
   --content - \
+  --css-path <css_path> \
   --need-open-comment=1 \
   --only-fans-can-comment=0 \
   --thumb-media-id "$thumb_media_id" < <workdir>/page.md
@@ -161,6 +166,7 @@ wxcli draft add \
 
 - `references/notion-search.json`: JSON template for Notion title search.
 - `references/cli-commands.md`: Canonical CLI command examples for `notion-cli` and `wxcli`.
+- `assets/default.css`: Default CSS theme (optional; pass via `--css-path`).
 
 Notes:
 - Use `--page-id` if the title search is ambiguous.

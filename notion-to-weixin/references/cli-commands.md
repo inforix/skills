@@ -67,5 +67,5 @@ wxcli draft add --title "Hello" --content - --thumb-media-id MEDIA_ID < article.
 Create a draft with explicit format:
 
 ```bash
-wxcli draft add --title "Hello" --format markdown --content - --thumb-media-id MEDIA_ID < article.md
+wxcli draft add --title "Hello" --format markdown --css-path ./style.css --content - --thumb-media-id MEDIA_ID < article.md
 ```
