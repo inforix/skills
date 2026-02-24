@@ -5,6 +5,21 @@ description: Fetch a Notion page by title, export to Markdown, convert Markdown 
 
 # Notion to Weixin
 
+## Config (Optional)
+
+Set a default `author` in `.agent/config.yaml`:
+
+```yaml
+notion_to_weixin:
+  author: "Alice Wang"
+```
+
+You can also set a global default:
+
+```yaml
+author: "Alice Wang"
+```
+
 ## Workflow (Sequential)
 
 1. Resolve Notion page ID from the given title.
@@ -42,38 +57,9 @@ description: Fetch a Notion page by title, export to Markdown, convert Markdown 
 
 ## Step 3: Default Author Handling
 
-- If `author` is not provided, read it from `.agent/config.yaml` (see Config below).
-- Read `<workdir>/page.md` and ensure YAML front matter exists.
-- Set or overwrite `author:` in front matter to the chosen author.
-- If no front matter exists, insert:
+- If `author` is not provided, read it from `.agent/config.yaml` .
 
-```markdown
----
-author: <AUTHOR>
----
-```
 
-- If you want a visible byline in the content, inject a line in Markdown after front matter:
-
-```markdown
-*作者：<AUTHOR>*
-```
-
-## Config (Optional)
-
-If you want a project‑level default author, add one of these to `.agent/config.yaml`:
-
-```yaml
-notion_to_weixin:
-  author: "Alice Wang"
-```
-
-Fallbacks (checked in order):
-
-```yaml
-author: "Alice Wang"
-default_author: "Alice Wang"
-```
 
 ## Step 4: Prepare `thumb_media_id`
 
