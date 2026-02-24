@@ -52,20 +52,8 @@ List image materials:
 wxcli material list --type image --offset 0 --count 10 --json
 ```
 
-Create a draft (HTML from stdin):
-
-```bash
-wxcli draft add --title "Hello" --content - --thumb-media-id MEDIA_ID
-```
-
-Create a draft (Markdown from stdin; wxcli auto‑conversion if supported):
+Create a draft (Markdown from stdin; wxcli auto‑conversion):
 
 ```bash
 wxcli draft add --title "Hello" --content - --thumb-media-id MEDIA_ID < article.md
-```
-
-Markdown to HTML (used before draft add):
-
-```bash
-npx markdown-to-html-cli --source article.md --style=./style.css
 ```

@@ -4,16 +4,15 @@ set -euo pipefail
 usage() {
   cat <<'USAGE'
 Usage:
-  run_pipeline.sh --title "Notion Title" --css /path/style.css --author "Name" [--page-id PAGE_ID] [--workdir DIR] [--thumb-media-id ID]
+  run_pipeline.sh --title "Notion Title" --author "Name" [--page-id PAGE_ID] [--workdir DIR] [--thumb-media-id ID]
 
 Requires:
-  notion-cli, wxcli, jq, curl, npx (markdown-to-html-cli)
+  notion-cli, wxcli, jq, curl
 USAGE
 }
 
 NOTION_TITLE=""
 PAGE_ID=""
-CSS_PATH=""
 AUTHOR=""
 WORKDIR=""
 FALLBACK_THUMB_ID=""
@@ -24,8 +23,6 @@ while [[ $# -gt 0 ]]; do
       NOTION_TITLE="$2"; shift 2;;
     --page-id)
       PAGE_ID="$2"; shift 2;;
-    --css)
-      CSS_PATH="$2"; shift 2;;
     --author)
       AUTHOR="$2"; shift 2;;
     --workdir)
@@ -44,15 +41,6 @@ if [[ -z "$NOTION_TITLE" && -z "$PAGE_ID" ]]; then
 fi
 if [[ -z "$AUTHOR" ]]; then
   echo "Missing --author"; exit 1
-fi
-
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-DEFAULT_CSS="$SCRIPT_DIR/../assets/default.css"
-if [[ -z "$CSS_PATH" ]]; then
-  CSS_PATH="$DEFAULT_CSS"
-fi
-if [[ ! -f "$CSS_PATH" ]]; then
-  echo "CSS file not found: $CSS_PATH"; exit 1
 fi
 
 if [[ -z "$WORKDIR" ]]; then
@@ -97,8 +85,6 @@ notion pages export "$PAGE_ID" --assets=link -o "$WORKDIR/page.md"
   --author "$AUTHOR" \
   --byline
 
-npx markdown-to-html-cli --source "$WORKDIR/page.md" --style "$CSS_PATH" > "$WORKDIR/page.html"
-
 THUMB_MEDIA_ID=""
 
 if [[ -n "${NOTION_TOKEN:-}" ]]; then
@@ -132,7 +118,8 @@ fi
 
 wxcli draft add \
   --title "$NOTION_TITLE" \
+  --author "$AUTHOR" \
   --content - \
-  --thumb-media-id "$THUMB_MEDIA_ID" < "$WORKDIR/page.html"
+  --thumb-media-id "$THUMB_MEDIA_ID" < "$WORKDIR/page.md"
 
 echo "Draft created. Workdir: $WORKDIR"
