@@ -119,6 +119,7 @@ fi
 wxcli draft add \
   --title "$NOTION_TITLE" \
   --author "$AUTHOR" \
+  --format markdown \
   --content - \
   --thumb-media-id "$THUMB_MEDIA_ID" < "$WORKDIR/page.md"
 

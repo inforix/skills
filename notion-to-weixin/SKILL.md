@@ -114,6 +114,17 @@ wxcli draft add \
 
 If your wxcli build requires an explicit flag to indicate Markdown input, add it to the command.
 
+Recommended (explicit format):
+
+```bash
+wxcli draft add \
+  --title "<notion_title>" \
+  --author "<author>" \
+  --format markdown \
+  --content - \
+  --thumb-media-id "$thumb_media_id" < <workdir>/page.md
+```
+
 - If you need machine-readable output, add `--json` and capture the returned `media_id`.
 
 
