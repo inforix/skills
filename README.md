@@ -8,8 +8,8 @@ This repository contains custom local skills used by the agent runtime.
 
 | Skill | Purpose | Main Entry |
 | --- | --- | --- |
-| `notion-to-weixin` | Fetch a Notion page by title, keep content in Markdown, process images, and publish to Weixin draft via `wxcli`. | `notion-to-weixin/SKILL.md` |
-| `obsidian-to-weixin` | Find an Obsidian note, keep Markdown as source, process images, and publish to Weixin draft via `wxcli`. | `obsidian-to-weixin/SKILL.md` |
+| `notion-to-weixin` | Fetch a Notion page by title, keep content in Markdown, process images, and publish to Weixin draft via `node-wxcli`. | `notion-to-weixin/SKILL.md` |
+| `obsidian-to-weixin` | Find an Obsidian note, keep Markdown as source, process images, and publish to Weixin draft via `node-wxcli`. | `obsidian-to-weixin/SKILL.md` |
 | `shmtu-word-formatter` | Format text or existing `.docx` into Shanghai Maritime University official document style and output `.docx`. | `shmtu-word-formatter/SKILL.md` |
 
 ## Repository Layout

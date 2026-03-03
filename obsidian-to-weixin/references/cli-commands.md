@@ -37,48 +37,55 @@ obsidian-cli list
 obsidian-cli list Projects
 ```
 
-## wxcli
+## node-wxcli
+
+Install and verify:
+
+```bash
+npm install -g node-wxcli
+node-wxcli --help
+```
 
 Auth:
 
 ```bash
-wxcli auth set --appid YOUR_APPID --appsecret YOUR_SECRET
-wxcli auth login
-wxcli auth status --json
+node-wxcli auth set --appid YOUR_APPID --appsecret YOUR_SECRET
+node-wxcli auth login
+node-wxcli auth status --json
 ```
 
 Upload image material (inline images):
 
 ```bash
-wxcli material upload --type image --file ./image.png --json
+node-wxcli material upload --type image --file ./image.png --json
 ```
 
 Upload thumb material (cover):
 
 ```bash
-wxcli material upload --type thumb --file ./cover.jpg --json
+node-wxcli material upload --type thumb --file ./cover.jpg --json
 ```
 
 Material count:
 
 ```bash
-wxcli material count --json
+node-wxcli material count --json
 ```
 
 List image materials:
 
 ```bash
-wxcli material list --type image --offset 0 --count 10 --json
+node-wxcli material list --type image --offset 0 --count 10 --json
 ```
 
-Create draft from Markdown stdin:
+Create draft from Markdown stdin (required: `--css-path` with `--format markdown`):
 
 ```bash
-wxcli draft add --title "Hello" --content - --thumb-media-id MEDIA_ID < article.md
+node-wxcli draft add --title "Hello" --format markdown --css-path ./style.css --content - --thumb-media-id MEDIA_ID < article.md
 ```
 
-Create draft with explicit Markdown + CSS:
+Create draft with the skill default CSS:
 
 ```bash
-wxcli draft add --title "Hello" --format markdown --css-path ./style.css --content - --thumb-media-id MEDIA_ID < article.md
+node-wxcli draft add --title "Hello" --format markdown --css-path ./assets/default.css --content - --thumb-media-id MEDIA_ID < article.md
 ```

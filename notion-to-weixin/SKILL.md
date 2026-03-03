@@ -1,6 +1,6 @@
 ---
 name: notion-to-weixin
-description: Fetch a Notion page by title, export to Markdown, convert Markdown to HTML with a user-provided CSS file, and create a Weixin draft via wxcli. Use when asked to publish Notion content into Weixin draftbox, or when moving Notion pages into Weixin draft as HTML.
+description: Fetch a Notion page by title, export to Markdown, convert Markdown to HTML with a user-provided CSS file, and create a Weixin draft via node-wxcli. Use when asked to publish Notion content into Weixin draftbox, or when moving Notion pages into Weixin draft as HTML.
 ---
 
 # Notion to Weixin
@@ -29,19 +29,19 @@ author: "Alice Wang"
 5. Prepare `thumb_media_id`:
    - If the Notion page has a cover, upload it as a Weixin `thumb` material and use that ID.
    - If no cover, use the last image material ID.
-6. Create a new Weixin draft using Markdown input (wxcli converts to HTML, optional CSS).
+6. Create a new Weixin draft using Markdown input (`--format markdown`) and always pass `--css-path`.
 
 ## Inputs (Ask the user if missing)
 
 - `notion_title`: exact Notion page title to publish.
-- `author`: optional author name (used for Markdown front matter and wxcli `--author`). If missing, read from `~/.agents/config.yaml`.
-- `css_path`: optional CSS file path (wxcli `--css-path` inlines styles). You can use `assets/default.css`.
+- `author`: optional author name (used for Markdown front matter and node-wxcli `--author`). If missing, read from `~/.agents/config.yaml`.
+- `css_path`: required when using `--format markdown`; if missing, default to `assets/default.css`.
 - `thumb_media_id`: only required if cover and image fallback both fail.
 
 ## Prerequisites
 
 - `notion-cli` installed and authenticated (NOTION_TOKEN or `notion auth set`).
-- `wxcli` installed and authenticated (`wxcli auth set` or `wxcli auth login`).
+- `node-wxcli` installed and authenticated (`node-wxcli auth set` or `node-wxcli auth login`).
 - `curl` and `jq` available.
 
 ## Step 1: Resolve Page ID by Title
@@ -72,7 +72,7 @@ so they remain valid for draft rendering.
 2. For each local image file, upload it and capture the `url`:
 
 ```bash
-wxcli material upload --type image --file <workdir>/assets/<image-file> --json | jq -r '.url'
+node-wxcli material upload --type image --file <workdir>/assets/<image-file> --json | jq -r '.url'
 ```
 
 3. Replace the Markdown image URL with the returned `url`:
@@ -108,7 +108,7 @@ if [ "$cover_type" = "file" ]; then
 else
   curl -L "$cover_url" -o <workdir>/cover.jpg
 fi
-thumb_media_id=$(wxcli material upload --type thumb --file <workdir>/cover.jpg --json | jq -r '.media_id')
+thumb_media_id=$(node-wxcli material upload --type thumb --file <workdir>/cover.jpg --json | jq -r '.media_id')
 ```
 
 Note: Notion file URLs expire quickly. If download fails, re-fetch page metadata and retry.
@@ -118,37 +118,28 @@ Note: Notion file URLs expire quickly. If download fails, re-fetch page metadata
 1. Get image material count:
 
 ```bash
-image_count=$(wxcli material count --json | jq -r '.image_count')
+image_count=$(node-wxcli material count --json | jq -r '.image_count')
 ```
 
 2. If `image_count > 0`, fetch the last image and use its `media_id`:
 
 ```bash
 offset=$((image_count - 1))
-thumb_media_id=$(wxcli material list --type image --offset "$offset" --count 1 --json | jq -r '.item[0].media_id')
+thumb_media_id=$(node-wxcli material list --type image --offset "$offset" --count 1 --json | jq -r '.item[0].media_id')
 ```
 
 3. If no images exist, ask the user to provide a `thumb_media_id` or upload a thumb manually.
 
 ## Step 6: Create Weixin Draft (Markdown input)
 
+When using Markdown format, always pass `--css-path`. If `css_path` is missing, set:
+
 ```bash
-wxcli draft add \
-  --title "<notion_title>" \
-  --author "<author>" \
-  --content - \
-  --css-path <css_path> \
-  --need-open-comment=1 \
-  --only-fans-can-comment=0 \
-  --thumb-media-id "$thumb_media_id" < <workdir>/page.md
+css_path=${css_path:-assets/default.css}
 ```
 
-If your wxcli build requires an explicit flag to indicate Markdown input, add it to the command.
-
-Recommended (explicit format):
-
 ```bash
-wxcli draft add \
+node-wxcli draft add \
   --title "<notion_title>" \
   --author "<author>" \
   --format markdown \
@@ -165,8 +156,8 @@ wxcli draft add \
 ## Resources
 
 - `references/notion-search.json`: JSON template for Notion title search.
-- `references/cli-commands.md`: Canonical CLI command examples for `notion-cli` and `wxcli`.
-- `assets/default.css`: Default CSS theme (optional; pass via `--css-path`).
+- `references/cli-commands.md`: Canonical CLI command examples for `notion-cli` and `node-wxcli`.
+- `assets/default.css`: Default CSS theme for `--format markdown` (`--css-path`).
 
 Notes:
 - Use `--page-id` if the title search is ambiguous.

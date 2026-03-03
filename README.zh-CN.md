@@ -8,8 +8,8 @@ English version: `README.md`
 
 | Skill | 用途 | 入口文件 |
 | --- | --- | --- |
-| `notion-to-weixin` | 按标题获取 Notion 页面，保留 Markdown 内容，处理图片后通过 `wxcli` 发布到微信草稿箱。 | `notion-to-weixin/SKILL.md` |
-| `obsidian-to-weixin` | 定位 Obsidian 笔记，保留 Markdown 内容，处理图片后通过 `wxcli` 发布到微信草稿箱。 | `obsidian-to-weixin/SKILL.md` |
+| `notion-to-weixin` | 按标题获取 Notion 页面，保留 Markdown 内容，处理图片后通过 `node-wxcli` 发布到微信草稿箱。 | `notion-to-weixin/SKILL.md` |
+| `obsidian-to-weixin` | 定位 Obsidian 笔记，保留 Markdown 内容，处理图片后通过 `node-wxcli` 发布到微信草稿箱。 | `obsidian-to-weixin/SKILL.md` |
 | `shmtu-word-formatter` | 将文本或已有 `.docx` 按上海海事大学党政公文规范统一排版并输出 `.docx`。 | `shmtu-word-formatter/SKILL.md` |
 
 ## 仓库结构

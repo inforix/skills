@@ -1,6 +1,6 @@
 ---
 name: obsidian-to-weixin
-description: Find an Obsidian note by title/path with obsidian-cli, keep note content as Markdown, upload note images to Weixin, and create a Weixin draft via wxcli from Markdown stdin. Use when publishing Obsidian notes into Weixin draftbox.
+description: Find an Obsidian note by title/path with obsidian-cli, keep note content as Markdown, upload note images to Weixin, and create a Weixin draft via node-wxcli from Markdown stdin. Use when publishing Obsidian notes into Weixin draftbox.
 ---
 
 # Obsidian to Weixin
@@ -29,20 +29,20 @@ author: "Alice Wang"
 5. Prepare `thumb_media_id`:
    - Use the **first image in note order** as Weixin cover (`material thumb`).
    - If note has no image, fallback to the **latest Weixin image material ID**.
-6. Create Weixin draft from Markdown stdin via `wxcli draft add`.
+6. Create Weixin draft from Markdown stdin via `node-wxcli draft add --format markdown --css-path ...`.
 
 ## Inputs (Ask if missing)
 
 - `note_path`: Obsidian note path from vault root (recommended), e.g. `Projects/Weekly Update.md`.
 - `note_title`: title/name to search when `note_path` is missing.
 - `author`: optional, fallback from `~/.agents/config.yaml`.
-- `css_path`: optional, can use `assets/default.css`.
+- `css_path`: required when using `--format markdown`; if missing, default to `assets/default.css`.
 - `thumb_media_id`: only needed if first-image + fallback both fail.
 
 ## Prerequisites
 
 - `obsidian-cli` installed and default vault configured.
-- `wxcli` installed and authenticated.
+- `node-wxcli` installed and authenticated.
 - `curl` + `jq` available.
 
 ## Step 1: Resolve note from Obsidian
@@ -93,7 +93,7 @@ Process in note order:
 3. Upload to Weixin image material:
 
 ```bash
-wxcli material upload --type image --file <image-file> --json | jq -r '.url'
+node-wxcli material upload --type image --file <image-file> --json | jq -r '.url'
 ```
 
 4. Replace original image target with returned Weixin URL.
@@ -110,7 +110,7 @@ wxcli material upload --type image --file <image-file> --json | jq -r '.url'
 Take the **first image reference** (top-to-bottom), resolve file/download if needed, then upload as thumb:
 
 ```bash
-thumb_media_id=$(wxcli material upload --type thumb --file <first-image-file> --json | jq -r '.media_id')
+thumb_media_id=$(node-wxcli material upload --type thumb --file <first-image-file> --json | jq -r '.media_id')
 ```
 
 ### 5.2 Fallback: latest Weixin image material
@@ -118,19 +118,26 @@ thumb_media_id=$(wxcli material upload --type thumb --file <first-image-file> --
 If note has no image:
 
 ```bash
-image_count=$(wxcli material count --json | jq -r '.image_count')
+image_count=$(node-wxcli material count --json | jq -r '.image_count')
 offset=$((image_count - 1))
-thumb_media_id=$(wxcli material list --type image --offset "$offset" --count 1 --json | jq -r '.item[0].media_id')
+thumb_media_id=$(node-wxcli material list --type image --offset "$offset" --count 1 --json | jq -r '.item[0].media_id')
 ```
 
 If no image materials exist, ask user to provide/upload cover and pass `--thumb-media-id`.
 
 ## Step 6: Create draft from Markdown stdin
 
+When using Markdown format, always pass `--css-path`. If `css_path` is missing, set:
+
 ```bash
-wxcli draft add \
+css_path=${css_path:-assets/default.css}
+```
+
+```bash
+node-wxcli draft add \
   --title "<note_title_or_custom_title>" \
   --author "<author>" \
+  --format markdown \
   --content - \
   --css-path <css_path> \
   --need-open-comment=1 \
@@ -138,16 +145,10 @@ wxcli draft add \
   --thumb-media-id "$thumb_media_id" < <workdir>/note.md
 ```
 
-If required by wxcli build, add explicit format:
-
-```bash
---format markdown
-```
-
 ## Resources
 
-- `references/cli-commands.md`: canonical command snippets (`obsidian-cli` + `wxcli`).
-- `assets/default.css`: optional CSS for draft rendering.
+- `references/cli-commands.md`: canonical command snippets (`obsidian-cli` + `node-wxcli`).
+- `assets/default.css`: default CSS for `--format markdown` (`--css-path`).
 
 ## Notes
 
