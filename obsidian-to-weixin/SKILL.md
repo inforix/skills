@@ -29,7 +29,8 @@ author: "Alice Wang"
 5. Prepare `thumb_media_id`:
    - Use the **first image in note order** as Weixin cover (`material thumb`).
    - If note has no image, fallback to the **latest Weixin image material ID**.
-6. Create Weixin draft from Markdown stdin via `node-wxcli draft add --format markdown --css-path ...`.
+6. Generate `digest` with AI summarization (if user did not provide one).
+7. Create Weixin draft from Markdown stdin via `node-wxcli draft add --format markdown --css-path ...`.
 
 ## Inputs (Ask if missing)
 
@@ -38,6 +39,7 @@ author: "Alice Wang"
 - `author`: optional, fallback from `~/.agents/config.yaml`.
 - `css_path`: required when using `--format markdown`; if missing, default to `assets/default.css`.
 - `thumb_media_id`: only needed if first-image + fallback both fail.
+- `digest`: optional user-provided summary; if missing, generate via AI from the final Markdown.
 
 ## Prerequisites
 
@@ -125,7 +127,16 @@ thumb_media_id=$(node-wxcli material list --type image --offset "$offset" --coun
 
 If no image materials exist, ask user to provide/upload cover and pass `--thumb-media-id`.
 
-## Step 6: Create draft from Markdown stdin
+## Step 6: Build `digest` with AI summarization
+
+If `digest` is not provided, summarize the final Markdown content with AI and generate a concise Chinese digest:
+
+- 1-2 sentences
+- Prefer 60-120 Chinese characters
+- Plain text only (no Markdown / emoji / line breaks)
+- Focus on the article purpose and key outcomes
+
+## Step 7: Create draft from Markdown stdin
 
 When using Markdown format, always pass `--css-path`. If `css_path` is missing, set:
 
@@ -137,6 +148,7 @@ css_path=${css_path:-assets/default.css}
 node-wxcli draft add \
   --title "<note_title_or_custom_title>" \
   --author "<author>" \
+  --digest "<digest>" \
   --format markdown \
   --content - \
   --css-path <css_path> \

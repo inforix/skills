@@ -29,7 +29,8 @@ author: "Alice Wang"
 5. Prepare `thumb_media_id`:
    - If the Notion page has a cover, upload it as a Weixin `thumb` material and use that ID.
    - If no cover, use the last image material ID.
-6. Create a new Weixin draft using Markdown input (`--format markdown`) and always pass `--css-path`.
+6. Generate `digest` with AI summarization (if user did not provide one).
+7. Create a new Weixin draft using Markdown input (`--format markdown`) and always pass `--css-path`.
 
 ## Inputs (Ask the user if missing)
 
@@ -37,6 +38,7 @@ author: "Alice Wang"
 - `author`: optional author name (used for Markdown front matter and node-wxcli `--author`). If missing, read from `~/.agents/config.yaml`.
 - `css_path`: required when using `--format markdown`; if missing, default to `assets/default.css`.
 - `thumb_media_id`: only required if cover and image fallback both fail.
+- `digest`: optional user-provided summary; if missing, generate via AI from the final Markdown.
 
 ## Prerequisites
 
@@ -130,7 +132,16 @@ thumb_media_id=$(node-wxcli material list --type image --offset "$offset" --coun
 
 3. If no images exist, ask the user to provide a `thumb_media_id` or upload a thumb manually.
 
-## Step 6: Create Weixin Draft (Markdown input)
+## Step 6: Build `digest` with AI summarization
+
+If `digest` is not provided, summarize the final Markdown content with AI and generate a concise Chinese digest:
+
+- 1-2 sentences
+- Prefer 60-120 Chinese characters
+- Plain text only (no Markdown / emoji / line breaks)
+- Focus on the article purpose and key outcomes
+
+## Step 7: Create Weixin Draft (Markdown input)
 
 When using Markdown format, always pass `--css-path`. If `css_path` is missing, set:
 
@@ -142,6 +153,7 @@ css_path=${css_path:-assets/default.css}
 node-wxcli draft add \
   --title "<notion_title>" \
   --author "<author>" \
+  --digest "<digest>" \
   --format markdown \
   --content - \
   --css-path <css_path> \

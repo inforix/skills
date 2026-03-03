@@ -68,11 +68,11 @@ node-wxcli material list --type image --offset 0 --count 10 --json
 Create a draft (Markdown from stdin; required: `--css-path` with `--format markdown`):
 
 ```bash
-node-wxcli draft add --title "Hello" --format markdown --css-path ./style.css --content - --thumb-media-id MEDIA_ID < article.md
+node-wxcli draft add --title "Hello" --digest "AI摘要" --format markdown --css-path ./style.css --content - --thumb-media-id MEDIA_ID < article.md
 ```
 
 Create a draft with the skill default CSS:
 
 ```bash
-node-wxcli draft add --title "Hello" --format markdown --css-path ./assets/default.css --content - --thumb-media-id MEDIA_ID < article.md
+node-wxcli draft add --title "Hello" --digest "AI摘要" --format markdown --css-path ./assets/default.css --content - --thumb-media-id MEDIA_ID < article.md
 ```
