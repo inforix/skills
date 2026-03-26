@@ -11,6 +11,7 @@ English version: `README.md`
 | `notion-to-weixin` | 按标题获取 Notion 页面，保留 Markdown 内容，处理图片后通过 `node-wxcli` 发布到微信草稿箱。 | `notion-to-weixin/SKILL.md` |
 | `obsidian-to-weixin` | 定位 Obsidian 笔记，保留 Markdown 内容，处理图片后通过 `node-wxcli` 发布到微信草稿箱。 | `obsidian-to-weixin/SKILL.md` |
 | `shmtu-word-formatter` | 将文本或已有 `.docx` 按上海海事大学党政公文规范统一排版并输出 `.docx`。 | `shmtu-word-formatter/SKILL.md` |
+| `electronic-trusted-certificate` | 通过 MCP over HTTP 探测、发现并调用上海海事大学电子可信证明相关工具，使用 Bearer Token 鉴权。 | `electronic-trusted-certificate/SKILL.md` |
 
 ## 仓库结构
 
@@ -26,6 +27,9 @@ English version: `README.md`
   - Skill 说明（`SKILL.md`）
   - 排版脚本（`scripts/format_word.py`）
   - 格式规范（`references/format-spec.md`）
+- `electronic-trusted-certificate/`
+  - Skill 说明（`SKILL.md`）
+  - MCP over HTTP 辅助脚本（`scripts/http_mcp.mjs`）
 - `dist/`
   - 构建产物或生成文件（如有）
 

@@ -11,6 +11,7 @@ This repository contains custom local skills used by the agent runtime.
 | `notion-to-weixin` | Fetch a Notion page by title, keep content in Markdown, process images, and publish to Weixin draft via `node-wxcli`. | `notion-to-weixin/SKILL.md` |
 | `obsidian-to-weixin` | Find an Obsidian note, keep Markdown as source, process images, and publish to Weixin draft via `node-wxcli`. | `obsidian-to-weixin/SKILL.md` |
 | `shmtu-word-formatter` | Format text or existing `.docx` into Shanghai Maritime University official document style and output `.docx`. | `shmtu-word-formatter/SKILL.md` |
+| `electronic-trusted-certificate` | Use an MCP-over-HTTP workflow to probe, discover, and call SHMTU electronic trusted certificate tools with bearer-token auth. | `electronic-trusted-certificate/SKILL.md` |
 
 ## Repository Layout
 
@@ -26,6 +27,9 @@ This repository contains custom local skills used by the agent runtime.
   - Skill instructions (`SKILL.md`)
   - formatter script (`scripts/format_word.py`)
   - formatting spec (`references/format-spec.md`)
+- `electronic-trusted-certificate/`
+  - Skill instructions (`SKILL.md`)
+  - MCP-over-HTTP helper script (`scripts/http_mcp.mjs`)
 - `dist/`
   - generated artifacts/build outputs (if any)
 
