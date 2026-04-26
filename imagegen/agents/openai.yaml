@@ -1,0 +1,8 @@
+interface:
+  display_name: "Image Generator"
+  short_description: "Generate images with Azure GPT-image models"
+  brand_color: "#2563EB"
+  default_prompt: "Use $imagegen to generate an image from this prompt and save it locally."
+
+policy:
+  allow_implicit_invocation: true
