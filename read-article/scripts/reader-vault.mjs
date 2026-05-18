@@ -92,7 +92,7 @@ function ensureFile(filePath, content, dryRun) {
 }
 
 function initVault(vaultPath, dryRun = false) {
-  const dirs = ['raw', 'sources', 'topics', 'entities', 'questions', 'assets'];
+  const dirs = ['raw', 'raw/cases', 'sources', 'topics', 'entities', 'questions', 'assets'];
   const results = [];
 
   for (const dir of dirs) {
@@ -123,6 +123,7 @@ function initVault(vaultPath, dryRun = false) {
     ensureFile(
       path.join(vaultPath, 'AGENTS.md'),
       `# Reader Vault Conventions\n\n- Keep raw source captures in \`raw/\` and avoid editing them after ingest.\n- Put one source note per article, paper, report, URL, or uploaded file in \`sources/\`.\n- Update existing \`topics/\`, \`entities/\`, and \`questions/\` pages before creating near-duplicates.\n- Maintain Obsidian wiki links between pages.\n- Update \`index.md\` after every ingest and append one entry to \`log.md\`.\n`,
+      `# Reader Vault Conventions\n\n- Keep raw source captures in \`raw/\` and avoid editing them after ingest.\n- Save downloaded original materials for cases mentioned by readings in \`raw/cases/<source-slug>/\`.\n- Put one source note per article, paper, report, URL, or uploaded file in \`sources/\`.\n- Update existing \`topics/\`, \`entities/\`, and \`questions/\` pages before creating near-duplicates.\n- Maintain Obsidian wiki links between pages.\n- Update \`index.md\` after every ingest and append one entry to \`log.md\`.\n`,
       dryRun,
     ),
   );

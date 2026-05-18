@@ -28,6 +28,7 @@ Expected vault structure:
 
 ```text
 raw/          immutable source captures or copied files
+raw/cases/    downloaded source material for cases mentioned by readings
 sources/      one note per ingested source
 topics/       evolving concept/theme pages
 entities/     people, organizations, products, places, projects
@@ -48,19 +49,25 @@ AGENTS.md     reader-vault operating conventions
    - Identify thesis, claims, evidence, assumptions, definitions, method, examples, implications, and open questions.
    - Distinguish the source's claims from your interpretation.
    - Preserve important citations, numbers, dates, and direct quotes sparingly.
-3. Check the existing wiki before writing.
+3. Trace and preserve case sources.
+   - Extract every substantive case, example, company, project, incident, dataset, law, paper, or report that the source relies on.
+   - Search for the best available original source for each case. Prefer primary sources, official pages, papers, reports, datasets, legal filings, archived pages, or the cited source over secondary summaries.
+   - Download or capture found case materials under `raw/cases/<source-slug>/` whenever access allows. Preserve PDFs, HTML/text captures, datasets, images, and citation pages with stable filenames.
+   - Record each case in the source note with original URL, local saved path, source type, access date, and confidence. If a case cannot be traced, mark it as unresolved and explain what was searched.
+   - Read `references/case-source-handling.md` before doing case tracing.
+4. Check the existing wiki before writing.
    - Read `index.md` first if it exists.
    - Search `sources/`, `topics/`, `entities/`, and `questions/` for overlapping concepts, authors, organizations, and claims.
    - Update existing pages when the new source changes or sharpens them; do not create near-duplicate topic pages.
-4. Create or update the source note.
+5. Create or update the source note.
    - Use `references/source-note-template.md`.
    - Link to relevant topic/entity/question pages with Obsidian wiki links.
    - Include enough source metadata to re-open the original file or URL.
-5. Maintain the wiki layer.
+6. Maintain the wiki layer.
    - Update `index.md` with the new or changed pages.
    - Append one parseable entry to `log.md`.
    - Create topic/entity/question pages only when they help future retrieval or synthesis.
-6. Answer the user.
+7. Answer the user.
    - Give a concise interpretation in chat.
    - Report the vault pages changed.
    - Surface uncertainties, missing access, paywalls, extraction failures, or places where the source needs human verification.
@@ -68,6 +75,7 @@ AGENTS.md     reader-vault operating conventions
 ## Output Standards
 
 Read `references/wiki-method.md` for the persistent-wiki model and `references/source-note-template.md` before writing source notes.
+Read `references/case-source-handling.md` whenever the article includes examples or cases.
 
 Every source note should include:
 
@@ -76,6 +84,7 @@ Every source note should include:
 - key claims and supporting evidence
 - interpretation and implications
 - notable quotes or exact data, only when needed
+- case/source provenance, including local downloads where available
 - connections to existing wiki pages
 - questions or follow-ups
 

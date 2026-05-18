@@ -35,6 +35,17 @@ One concise paragraph explaining what this source says and why it matters.
 
 - Definitions, numbers, names, dates, examples, mechanisms, or constraints that future notes may need.
 
+## Cases And Source Provenance
+
+| Case | Role in source | Best original source | Local saved copy | Confidence | Notes |
+| --- | --- | --- | --- | --- | --- |
+| Case name | Evidence/example/counterexample | URL or citation | `raw/cases/source-slug/file.ext` | high/medium/low/unresolved | What was verified, downloaded, or still missing |
+
+- Unresolved case searches:
+  - Case: ...
+    Searched: queries, cited references, official sites, archives, databases.
+    Result: why no reliable source was saved.
+
 ## Interpretation
 
 - What follows if this source is right?
@@ -58,6 +69,7 @@ One concise paragraph explaining what this source says and why it matters.
 ## Source Handling
 
 - Raw capture: [[../raw/file-name]]
+- Case materials: [[../raw/cases/source-slug]]
 - Access notes: paywall, extraction issue, missing figures, unavailable URL, or verification needs.
 ```
 
