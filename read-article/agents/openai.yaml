@@ -1,0 +1,8 @@
+interface:
+  display_name: "Read Article"
+  short_description: "Read and file articles into the reader vault"
+  brand_color: "#0F766E"
+  default_prompt: "Use $read-article to interpret this URL or file and save the reading notes into my reader vault."
+
+policy:
+  allow_implicit_invocation: true

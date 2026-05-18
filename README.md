@@ -11,6 +11,7 @@ This repository contains custom local skills used by the agent runtime.
 | `notion-to-weixin` | Fetch a Notion page by title, keep content in Markdown, process images, and publish to Weixin draft via `node-wxcli`. | `notion-to-weixin/SKILL.md` |
 | `obsidian-to-weixin` | Find an Obsidian note, keep Markdown as source, process images, and publish to Weixin draft via `node-wxcli`. | `obsidian-to-weixin/SKILL.md` |
 | `imagegen` | Generate images with Azure OpenAI GPT-image models and save local image files. | `imagegen/SKILL.md` |
+| `read-article` | Read a URL or local file, interpret it, and maintain durable notes in the Obsidian reader vault. | `read-article/SKILL.md` |
 | `shmtu-word-formatter` | Format text or existing `.docx` into Shanghai Maritime University official document style and output `.docx`. | `shmtu-word-formatter/SKILL.md` |
 | `electronic-trusted-certificate` | Use an MCP-over-HTTP workflow to probe, discover, and call SHMTU electronic trusted certificate tools with bearer-token auth. | `electronic-trusted-certificate/SKILL.md` |
 
@@ -28,6 +29,10 @@ This repository contains custom local skills used by the agent runtime.
   - Skill instructions (`SKILL.md`)
   - Azure OpenAI image generation CLI (`scripts/generate-image.mjs`)
   - API notes (`references/`)
+- `read-article/`
+  - Skill instructions (`SKILL.md`)
+  - reader vault helper CLI (`scripts/reader-vault.mjs`)
+  - wiki method and source-note templates (`references/`)
 - `shmtu-word-formatter/`
   - Skill instructions (`SKILL.md`)
   - formatter script (`scripts/format_word.py`)
