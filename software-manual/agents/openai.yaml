@@ -1,0 +1,6 @@
+interface:
+  display_name: "Word Software Manual"
+  short_description: "启动应用截图并生成 Word 与离线单文件 HTML 软件手册"
+  default_prompt: "Use $software-manual to start and inspect this application, capture verified UI screenshots, and generate a Word (.docx) manual plus a single-file offline HTML manual."
+policy:
+  allow_implicit_invocation: true
