@@ -21,6 +21,7 @@ description: 从真实软件项目生成可编辑、可验证的 Word（.docx）
 - 截图前清理敏感数据、调试浮层和无关窗口。每张截图必须有图题、正文引用和替代文本。
 - 工作文件写入用户指定目录；未指定时使用仓库内 `work/software-manual-<timestamp>/`。最终文件写入用户指定位置或 `docs/manual/`，不要散落到仓库根目录。
 - 创建或修改 DOCX 时遵循当前环境的 `documents` 技能；先加载工作区依赖，使用其 Python，并在最终交付前渲染和查看每一页。
+- Word 组装与渲染前必须显式加载当前系统字体配置及中文字体回退链，不能只依赖 DOCX 内部的字体声明；若出现中文缺字、方框、乱码或异常回退，修正渲染字体配置后重新渲染整份文档，再逐页复核并记录结果。
 
 ## 编排方式
 
@@ -91,7 +92,7 @@ python <skill-dir>/scripts/extract_apis.py \
   --report <work-dir>/docx-validation-report.json
 ```
 
-再按 [阶段 6](references/phases/06-iterative-refinement.md) 使用 `documents` 技能提供的 `render_docx.py` 把整份 Word 渲染为逐页 PNG，并查看每一页。修复遮挡、截断、孤行标题、表格越界、图片失真、页眉页脚冲突和异常空白后重新渲染。未完成逐页视觉复核时，不得声称 Word 手册已验收。
+再按 [阶段 6](references/phases/06-iterative-refinement.md) 显式加载系统字体配置后，使用 `documents` 技能提供的 `render_docx.py` 把整份 Word 渲染为逐页 PNG，并查看每一页。修复中文字体、遮挡、截断、孤行标题、表格越界、图片失真、页眉页脚冲突和异常空白后，必须重新渲染整份文档。未完成逐页视觉复核时，不得声称 Word 手册已验收。
 
 ### 9. 组装单文件 HTML
 
