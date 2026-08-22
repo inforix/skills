@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Codex software-manual skill">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231769e0'/%3E%3Cpath d='M18 14h22a6 6 0 0 1 6 6v30H24a6 6 0 0 1-6-6V14zm6 8v20a8 8 0 0 1 5-2h11V22H24z' fill='white'/%3E%3C/svg%3E">
+  <title>{{TITLE}}</title>
+  <style>{{CSS}}</style>
+</head>
+<body data-manual="software-manual">
+  <a class="skip-link" href="#manual-content">跳到正文</a>
+  <header class="topbar">
+    <button id="menu-toggle" class="icon-button mobile-only" type="button" aria-controls="manual-sidebar" aria-expanded="false">目录</button>
+    <div class="brand">
+      <strong>{{TITLE}}</strong>
+      <span>{{VERSION}}</span>
+    </div>
+    <button id="theme-toggle" class="icon-button" type="button" aria-label="切换明暗主题">主题</button>
+  </header>
+  <div class="manual-layout">
+    <aside id="manual-sidebar" class="sidebar" aria-label="手册导航">
+      <label class="search-label" for="manual-search">搜索手册</label>
+      <input id="manual-search" class="search-input" type="search" placeholder="输入关键词，按 / 聚焦" autocomplete="off">
+      <div id="search-status" class="search-status" aria-live="polite"></div>
+      <div class="tag-filter" aria-label="章节标签">{{TAGS}}</div>
+      <nav id="manual-nav">{{NAV}}</nav>
+    </aside>
+    <main id="manual-content" class="content" tabindex="-1">
+      {{SECTIONS}}
+    </main>
+  </div>
+  <script id="manual-search-data" type="application/json">{{SEARCH_INDEX}}</script>
+  <script>
+  (() => {
+    'use strict';
+    const manualTitle = {{TITLE_JSON}};
+    const sections = [...document.querySelectorAll('.content-section')];
+    const navLinks = [...document.querySelectorAll('.nav-item')];
+    const search = document.getElementById('manual-search');
+    const status = document.getElementById('search-status');
+    const sidebar = document.getElementById('manual-sidebar');
+    const menu = document.getElementById('menu-toggle');
+    const theme = document.getElementById('theme-toggle');
+    const searchData = JSON.parse(document.getElementById('manual-search-data').textContent || '[]');
+    let activeTag = 'all';
+
+    function showSection(id, updateHash = true) {
+      const target = document.getElementById(`section-${id}`) || sections[0];
+      if (!target) return;
+      sections.forEach(section => { section.hidden = section !== target; });
+      navLinks.forEach(link => {
+        const active = link.dataset.section === target.dataset.section;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+      });
+      if (updateHash) history.replaceState(null, '', `#/${target.dataset.section}`);
+      document.title = `${target.dataset.title} · ${manualTitle}`;
+      document.getElementById('manual-content').focus({preventScroll: true});
+      sidebar.classList.remove('open');
+      menu.setAttribute('aria-expanded', 'false');
+    }
+
+    function applyFilters() {
+      const query = search.value.trim().toLocaleLowerCase();
+      let visible = 0;
+      navLinks.forEach(link => {
+        const item = searchData.find(entry => entry.id === link.dataset.section);
+        const tagMatch = activeTag === 'all' || (item && item.tags.includes(activeTag));
+        const textMatch = !query || (item && `${item.title} ${item.body}`.toLocaleLowerCase().includes(query));
+        const show = Boolean(tagMatch && textMatch);
+        link.hidden = !show;
+        if (show) visible += 1;
+      });
+      document.querySelectorAll('.nav-group').forEach(group => {
+        group.hidden = ![...group.querySelectorAll('.nav-item')].some(link => !link.hidden);
+      });
+      status.textContent = query || activeTag !== 'all' ? `找到 ${visible} 个章节` : '';
+    }
+
+    navLinks.forEach(link => link.addEventListener('click', event => {
+      event.preventDefault();
+      showSection(link.dataset.section);
+    }));
+    document.querySelectorAll('.nav-group-toggle').forEach(button => button.addEventListener('click', () => {
+      const group = button.closest('.nav-group');
+      const collapsed = group.classList.toggle('collapsed');
+      button.setAttribute('aria-expanded', String(!collapsed));
+    }));
+    document.querySelectorAll('.section-collapse').forEach(button => button.addEventListener('click', () => {
+      const body = button.closest('.content-section').querySelector('.section-body');
+      body.hidden = !body.hidden;
+      button.setAttribute('aria-expanded', String(!body.hidden));
+      button.textContent = body.hidden ? '展开内容' : '收起内容';
+    }));
+    document.querySelectorAll('.tag-button').forEach(button => button.addEventListener('click', () => {
+      activeTag = button.dataset.tag;
+      document.querySelectorAll('.tag-button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      applyFilters();
+    }));
+    search.addEventListener('input', applyFilters);
+    menu.addEventListener('click', () => {
+      const open = sidebar.classList.toggle('open');
+      menu.setAttribute('aria-expanded', String(open));
+    });
+    theme.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('manual-theme', next);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === '/' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+        event.preventDefault();
+        search.focus();
+      }
+      if (event.key === 'Escape') {
+        search.value = '';
+        applyFilters();
+        sidebar.classList.remove('open');
+      }
+    });
+    window.addEventListener('hashchange', () => showSection(location.hash.replace(/^#\//, ''), false));
+    const savedTheme = localStorage.getItem('manual-theme');
+    if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+    showSection(location.hash.replace(/^#\//, '') || (sections[0] && sections[0].dataset.section), false);
+  })();
+  </script>
+</body>
+</html>
