@@ -65,7 +65,7 @@ work/software-manual-<timestamp>/
 `screenshots/screenshots-manifest.json`：
 
 ```json
-{"screenshots": [{"id": "login", "file": "login.png", "description": "登录页及身份验证入口", "url": "/login", "selector": "main", "status": "captured"}]}
+{"screenshots": [{"id": "login", "step": "login-01", "file": "login.png", "description": "登录页及身份验证入口", "url": "/login", "selector": "main", "status": "captured"}]}
 ```
 
 状态可为 `captured`、`failed`、`manual_required` 或 `skipped`。只有 `captured` 可计入截图覆盖率。配置中的文件路径均相对工作目录解析；输出路径不得覆盖产品源码或已有用户文件，除非用户明确允许。
